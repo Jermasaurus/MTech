@@ -1,0 +1,47 @@
+package evilHangman;
+
+import java.util.Iterator;
+
+/**
+ * 
+ * This class implements the Trie Iterator.
+ * 
+ * @author Bryan Franklin
+ * @author Jeremy Sommerfeld
+ * 
+ */
+public class TrieIterator implements Iterator<String> {
+
+	int trieSize = 0;
+	int totalNodes = 0;
+	int nodeCount = 0;
+	int count = 0;
+
+	public TrieIterator(int c, int n) {
+		trieSize = c;
+		totalNodes = n;
+	}
+
+	public boolean hasNext() {
+		return(count < trieSize);
+	}
+
+	public String next() {
+		String s = "";
+		TrieNode currentNode = TrieNode.root;
+		//Iterate to the leaf node of each to get a word.
+		for(int i = nodeCount; i < totalNodes; i++) {
+			s += currentNode.letter; //letter at node.
+			if(currentNode.isFullWord) {
+				count++;
+				return s;
+			}
+		}
+		return null;
+	}
+
+	public void remove() {
+		
+		//Trie.deleteWord(next());
+	}
+}

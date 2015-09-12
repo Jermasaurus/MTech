@@ -1,0 +1,149 @@
+package evilHangman;
+
+import normalHangman.HangMan;
+
+/**
+ * 
+ * This class implements the game Hangman.
+ * 
+ * @author Bryan Franklin
+ * @author Jeremy Sommerfeld
+ * 
+ */
+public class EvilHangMan extends HangMan {
+	/**
+	 * HangMan constructor that loads a dictionary of words from a file.
+	 * 
+	 * @param fileName
+	 *            Name of the dictionary file to load.
+	 */
+	public EvilHangMan(String fileName) {
+		super(fileName);
+		filterWords();
+		currentWord = "Evil Hangman Doesn't Use This";
+	}
+
+	/**
+	 * To simplify things, words that contain non-letters (e.g. contractions)
+	 * are forbidden.
+	 */
+	private void filterWords() {
+		int numValid = 0;
+
+		// count valid words
+		for (String word : words) {
+			if (word.matches("^[a-zA-Z]*$"))
+				numValid += 1;
+		}
+
+		// copy valid words to new list
+		String[] validWords = new String[numValid];
+		int pos = 0;
+		for (String word : words) {
+			if (word.matches("^[a-zA-Z]*$"))
+				validWords[pos++] = word;
+		}
+
+		// replace old word list with just valid words
+		words = validWords;
+	}
+
+	/**
+	 * Update the game state to lose the current game. The current player will
+	 * lose one point, and the next player will start the next word.
+	 */
+	public void giveUp() {
+		failures = bodyParts;
+		gameLost = true;
+		scores[currentPlayer] -= wordLength;
+		nextPlayer();
+	}
+
+	/**
+	 * Selects a new word from the dictionary and resets the game state for the
+	 * new word.
+	 * 
+	 * @return true if a new word is selected, false otherwise.
+	 */
+	public boolean newWord() {
+		resetLetters();
+		gameWon = false;
+		gameLost = false;
+		failures = 0;
+
+		// TODO
+
+		return false;
+	}
+
+	/**
+	 * Updated game state when a user guesses a letter.
+	 * 
+	 * @param ch
+	 *            the letter being guessed.
+	 * @return true if the letter is available and in the word, false otherwise.
+	 */
+	public boolean guessLetter(char ch) {
+		boolean exposedLetter = false;
+
+		// simply return a failure is the game is not active
+		if (gameWon || gameLost)
+			return false;
+
+		// return a failure if the guess isn't a letter
+		if (!Character.isLetter(ch))
+			return false;
+
+		// return a failure is the guess is a repeat
+		if (!letterAvailable(ch))
+			return false;
+
+		// mark the letter as guessed
+		char upper = Character.toUpperCase(ch);
+		letters[upper - 'A'] = Character.toLowerCase(ch);
+
+		// TODO
+		//Trie.next();
+		
+		// return true is a letter was exposed
+		if (exposedLetter) {
+			return true;
+		}
+
+		// record failure and test for losing
+		failures += 1;
+		scores[currentPlayer] -= 1;
+		if (failures >= bodyParts) {
+			gameLost = true;
+		} else {
+			nextPlayer();
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get the currently exposed portions of the word. Unexposed letters will be
+	 * represented by '_' (underscore).
+	 * 
+	 * @return String containing exposed portions of the word
+	 */
+	public String getExposedLetters() {
+		// TODO
+		return "Not Done Yet!";
+	}
+
+	/**
+	 * Returns the list of words that the answer could still be chosen from.
+	 * 
+	 * @return Array of words that still match the exposed pattern of letters
+	 */
+	public String[] remainingWords() {
+		// TODO
+		
+		String[] remaining = ;
+		
+		
+		return remaining;
+	}
+}

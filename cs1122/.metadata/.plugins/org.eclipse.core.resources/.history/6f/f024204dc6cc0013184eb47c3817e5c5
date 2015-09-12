@@ -1,0 +1,151 @@
+package evilHangman;
+
+import java.util.Iterator;
+
+/**
+ * 
+ * @author Jeremy Sommerfeld
+ * 
+ */
+public class Trie implements Iterable<String> {
+	
+	int numNodes = 1;
+	int numWords = 0;
+	TrieNode root = new TrieNode();
+	int asciiOffset = 97;
+
+	public Trie() {
+		TrieNode root = new TrieNode();
+	}
+
+	/**
+	 * This method adds a word to the Trie
+	 * 
+	 * @param s
+	 *            - word to add to the Trie
+	 */
+	public void addWord(String s) {
+		int wordLength = s.length();
+		char[] letters = s.toCharArray();
+		TrieNode currentNode = root;
+		
+		for(int i = 0; i < wordLength; i++) {
+			if(currentNode.links[letters[i] - asciiOffset] == null) {
+				//create a new child node.
+				boolean end = false;
+				if(i == wordLength-1) {
+					end = true;
+				}
+				//Create a new node if one does not already exist.
+				currentNode.links[letters[i]-asciiOffset] = new TrieNode(letters[i], end);
+				numNodes++;
+				
+				//Move to the next node.
+				currentNode = currentNode.nodeForLetter(letters[i]);
+			}
+		}
+		numWords++;
+	}
+
+	/**
+	 * This method removes a word from the Trie. Nodes in the Trie that no
+	 * longer lead to words because of deletion should be pruned from the Trie,
+	 * as they are dead weight!
+	 * 
+	 * @param s
+	 *            - word to delete from the Trie
+	 */
+	public void deleteWord(String s) {
+		// TODO
+		int wordLength = s.length();
+		char[] letters = s.toCharArray();
+		TrieNode currentNode = root;
+		
+		for(int i = 0; i  < wordLength; i++) {
+			currentNode = currentNode.links[letters[i]];
+			if(currentNode == null) {
+				return;
+			}
+		}
+		numWords--;
+	}
+
+	/**
+	 * This method should check the Trie to see if a word is stored in it.
+	 * 
+	 * @param s
+	 *            word you are looking for
+	 * @return true if the word is stored in the trie, false otherwise
+	 */
+	public boolean hasWord(String s) {
+		char[] letters = s.toCharArray();
+        int wordLength = letters.length;
+        TrieNode currentNode = root;
+       
+        for (int i = 0; i < wordLength; i++)
+        {
+        	//Check to see if child node exists.
+            if (currentNode == null) {
+                return false;
+            }
+            currentNode = currentNode.links[letters[i]-asciiOffset];
+        }
+       
+        //If after the whole word has been searched nodes still exist, check to see if the
+        //full word flag is ticked.
+        if(currentNode.isFullWord) {
+        	return true;
+        }
+        return false;
+	}
+
+	/**
+	 * This method returns the total number of nodes in the trie.
+	 * 
+	 * @return number of letters in the trie
+	 */
+	public int nodeCount() {
+		return numNodes;
+	}
+
+	/**
+	 * This method returns the total number of unique words in the trie
+	 * 
+	 * @return number of unique words stored in the trie.
+	 */
+	public int size() {
+		return numWords;
+	}
+
+	/**
+	 * Returns the root node of the Trie.
+	 * 
+	 * @return The root node of the Trie
+	 */
+	public TrieNode root() {
+		return root;
+	}
+
+	/**
+	 * This method returns an iterator for the trie, as required by the Iterable
+	 * interface.
+	 * 
+	 * @return and iterator for the trie.
+	 */
+	public Iterator<String> iterator() {
+		// TODO
+		return new TrieIterator(size(), nodeCount());
+		//return TrieIterator;
+	}
+
+	/**
+	 * This method removes all entries from the trie using an iterator.
+	 */
+	public void clear() {
+		Iterator<String> iter = iterator();
+		while (iter.hasNext()) {
+			iter.next();
+			iter.remove();
+		}
+	}
+}

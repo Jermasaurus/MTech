@@ -1,0 +1,8 @@
+8	block size (>=4 and a power of 2)
+2	associativity (1 <= assoc <= 16)
+65536	total size (>=4 and must satisfy size=#sets*assoc*blocksize, #sets a power of 2)
+c	startup (c=cold, w=warm) - use cold
+l	replacement policy (r=random, f=fifo, l=lru)
+b	write policy (t=through, b=back)
+u	write-hit action (i=invalidate, u=update) - ignored for write-back 
+a	write-miss action (n=nothing, a=allocate) - ignored for write-back

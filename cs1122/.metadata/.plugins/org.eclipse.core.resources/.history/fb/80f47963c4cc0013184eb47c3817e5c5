@@ -1,0 +1,33 @@
+package evilHangman;
+
+/**
+ * This class serves as nodes in the Trie structure
+ * 
+ * @author Jeremy Sommerfeld
+ * 
+ */
+public class TrieNode {
+
+	static TrieNode root = null;
+	char letter;
+	TrieNode[] links;
+	boolean isFullWord;
+	
+	public TrieNode nodeForLetter(char ch) {
+		// TODO
+		this.letter = ch;
+		links = new TrieNode[26];
+		this.isFullWord = false;
+		
+		return null;
+	}
+
+	public boolean isEndOfWord() {
+		if(this.isFullWord == true) {
+			return true;
+		}
+		return false;
+	}
+
+	/* You are allowed to add more methods to this class as needed. */
+}
